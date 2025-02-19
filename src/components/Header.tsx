@@ -12,9 +12,11 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
-            <span className="ml-7 text-xl font-bold bg-blue-600 rounded-[7px] p-2 text-white">
-              JOBSPHERE
-            </span>
+            <Link to="/">
+              <span className="ml-7 text-xl font-bold bg-blue-600 rounded-[7px] p-2 text-white">
+                JOBSPHERE
+              </span>
+            </Link>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
             <a
@@ -48,7 +50,7 @@ export function Header() {
                 Login
               </button>
             </Link>
-            <Link to="/signin" >
+            <Link to="/signin">
               <button className="text-gray-700 border border-gray-300 px-6 py-2 rounded-md hover:bg-gray-50">
                 Sign In
               </button>
