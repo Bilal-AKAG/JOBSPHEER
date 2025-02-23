@@ -9,13 +9,11 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-        
           <Route path="/" element={<MainJobs />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/jobs/:id" element={<JobDetails/>}/>;
-          
+          <Route path="/jobs/:id" element={<JobDetails />} />;
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
       </Routes>
     </BrowserRouter>
   );
