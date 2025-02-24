@@ -6,10 +6,11 @@ interface FiltersProps {
   resetFilters: () => void;
 }
 
-const jobTypes = ["Full-Time", "Hybrid", "Internship", "Contract", "Volunteer"];
+// Update job types to match API's expected values
+const jobTypes = ["Full-time", "Hybrid", "Internship", "Contract", "Volunteer"];
 
 const jobTypeDisplayNames: Record<string, string> = {
-  "Full-Time": "Full Time",
+  "Full-time": "Full Time",
   Hybrid: "Hybrid",
   Internship: "Internship",
   Contract: "Contract",
@@ -23,14 +24,6 @@ export function Filters({
   handleSalaryRangeChange,
   resetFilters,
 }: FiltersProps) {
-  // Debounce the salary range changes to prevent too many API calls
-  const debouncedSalaryChange = (value: number) => {
-    const timeoutId = setTimeout(() => {
-      handleSalaryRangeChange(value);
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  };
-
   return (
     <div className="col-span-3">
       <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -46,13 +39,7 @@ export function Filters({
                     type="radio"
                     name="jobType"
                     checked={selectedTypes.includes(type)}
-                    onChange={() => {
-                      // Clear previous selection and select new type
-                      const currentType = selectedTypes.includes(type)
-                        ? []
-                        : [type];
-                      toggleJobType(type);
-                    }}
+                    onChange={() => toggleJobType(type)}
                     className="rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="ml-2 text-gray-700">
@@ -72,10 +59,9 @@ export function Filters({
                 max="200000"
                 step="1000"
                 value={salaryRange[1]}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  debouncedSalaryChange(value);
-                }}
+                onChange={(e) =>
+                  handleSalaryRangeChange(Number(e.target.value))
+                }
                 className="w-full accent-blue-600"
               />
               <div className="flex justify-between text-sm text-gray-600">
@@ -87,7 +73,7 @@ export function Filters({
 
           <button
             onClick={resetFilters}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors duration-200"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
             Reset all filters
           </button>

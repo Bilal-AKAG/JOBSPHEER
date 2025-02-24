@@ -16,7 +16,7 @@ export default function Signin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50">
       <div className="flex w-full max-w-6xl mx-4">
         {/* Left side - Form */}
         <div className="w-full lg:w-1/2 p-8">

@@ -1,18 +1,23 @@
 export interface Job {
+  _id: string;
   id: string;
   title: string;
-  company: string;
-  location: string;
   type: string;
   salary: string;
   description: string;
-  requirements: string[];
-  posted: string;
-  isBookMarked?: boolean;
+  company: string;
+  logo: string;
+  isBookMarked: boolean;
+  location: string;
+  experienceLevel: string;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
 export interface JobsResponse {
   jobs: Job[];
-  totalJobs: number;
-  currentPage: number;
-  totalPages: number;
+  total: number;
+  page: number;
+  limit: number;
 }

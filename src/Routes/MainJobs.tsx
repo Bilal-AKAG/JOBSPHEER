@@ -6,22 +6,15 @@ import { Filters } from "../components/Filters";
 import { JobList } from "../components/JobList";
 import { SavedJobs } from "../components/SavedJobs";
 import { Pagination } from "../components/Pagination";
-import type { Job } from "../types";
+import type { JobsResponse } from "../types";
 
-const JOBS_PER_PAGE = 5; // Make sure this matches your API's limit
+const JOBS_PER_PAGE = 3; // We'll keep this the same unless API indicates otherwise
 
 type FetchJobsParams = {
   page: number;
   searchTerm: string;
   selectedTypes: string[];
   salaryRange: [number, number];
-};
-
-type JobsResponse = {
-  jobs: Job[];
-  total: number;
-  currentPage: number;
-  totalPages: number;
 };
 
 const fetchJobs = async ({
@@ -35,37 +28,47 @@ const fetchJobs = async ({
     limit: JOBS_PER_PAGE.toString(),
   });
 
-  if (searchTerm) {
-    queryParams.append("title", searchTerm);
+  // Update search parameter
+  if (searchTerm.trim()) {
+    queryParams.append("title", searchTerm.trim());
   }
 
+  // Update type parameter - ensure exact match with API values
   if (selectedTypes.length === 1) {
-    queryParams.append("type", selectedTypes[0]);
+    const typeMap: Record<string, string> = {
+      "Full-time": "Full-time",
+      Hybrid: "Hybrid",
+      Internship: "Internship",
+      Contract: "Contract",
+      Volunteer: "Volunteer",
+    };
+    const mappedType = typeMap[selectedTypes[0]];
+    if (mappedType) {
+      queryParams.append("type", mappedType);
+    }
   }
 
+  // Update salary range parameters
   if (salaryRange[1] < 200000) {
     queryParams.append("minSalary", salaryRange[0].toString());
     queryParams.append("maxSalary", salaryRange[1].toString());
+    queryParams.append("maxSalary", salaryRange[1].toString());
   }
 
-  console.log(`Fetching page ${page}`); // Debug log
+  const url = `https://joblisting-3hjv.onrender.com/api/jobs?${queryParams}`;
+  console.log("Fetching with filters:", url);
 
-  const response = await fetch(
-    `https://joblisting-rd8f.onrender.com/api/jobs?${queryParams.toString()}`
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch jobs");
-  }
-
+  const response = await fetch(url);
   const data = await response.json();
-  console.log("API Response:", data); // Debug log
 
+  console.log("API Response:", data);
+
+  // Handle empty results properly
   return {
-    jobs: data.jobs,
-    total: data.total,
-    currentPage: data.currentPage || page,
-    totalPages: data.totalPages || Math.ceil(data.total / JOBS_PER_PAGE),
+    jobs: data.jobs || [],
+    total: data.total || 0,
+    page: data.page || page,
+    limit: data.limit || JOBS_PER_PAGE,
   };
 };
 
@@ -101,7 +104,7 @@ const MainJobs: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    console.log("Changing to page:", page); // Debug log
+    console.log("Changing to page:", page);
     setCurrentPage(page);
     refetch();
   };
@@ -112,11 +115,13 @@ const MainJobs: React.FC = () => {
       setCurrentPage(1);
       return newTypes;
     });
+    refetch();
   };
 
   const handleSalaryRangeChange = (value: number) => {
     setSalaryRange([0, value]);
     setCurrentPage(1);
+    refetch();
   };
 
   const resetFilters = () => {
@@ -147,8 +152,10 @@ const MainJobs: React.FC = () => {
 
   const savedJobs = jobs.filter((job) => bookmarkedJobs.has(job.id));
 
-  // Calculate total pages based on the API response
-  const totalPages = data?.totalPages || 1;
+  // Calculate total pages based on total jobs and limit
+  const totalPages = data
+    ? Math.ceil(data.total / (data.limit || JOBS_PER_PAGE))
+    : 1;
 
   return (
     <div className="min-h-screen bg-gray-50">
