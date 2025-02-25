@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { signupSchema, type SignupFormValues } from "../Validation-schemas";
 import signin from "../assets/signin.svg"
+import { Link } from "react-router";
 export default function Signin() {
   const initialValues: SignupFormValues = {
     firstName: "",
@@ -272,9 +273,12 @@ export default function Signin() {
             {/* Login link */}
             <p className="mt-8 text-center text-gray-600">
               Already have an account?{" "}
-              <a href="#" className="text-[#0034D1] hover:underline">
-                Login
-              </a>
+              <Link to="/Login">
+                {" "}
+                <a href="#" className="text-[#0034D1] hover:underline">
+                  Login
+                </a>
+              </Link>
             </p>
           </div>
         </div>

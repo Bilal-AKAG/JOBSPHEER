@@ -42,12 +42,12 @@ export function Header() {
           </nav>
           <div className="flex items-center space-x-4">
             <Link to="/Login">
-              <button className="bg-[#0044F2] text-white px-6 py-2 rounded-md hover:bg-blue-700">
+              <button className="bg-[#0044F2] cursor-pointer  text-white px-6 py-2 rounded-md hover:bg-blue-700">
                 Login
               </button>
             </Link>
             <Link to="/signin">
-              <button className="text-gray-700 border border-gray-300 px-6 py-2 rounded-md hover:bg-gray-50">
+              <button className="text-gray-700 cursor-pointer  border border-gray-300 px-6 py-2 rounded-md hover:bg-gray-50">
                 Sign In
               </button>
             </Link>
